@@ -90,7 +90,7 @@ module Fog
                 'Message' => 'A version-id marker cannot be specified without a key marker.',
                 'ArgumentValue' => version_id_marker,
                 'RequestId' => Fog::Mock.random_hex(16),
-                'HostId' => Fog::Mock.random_base64(65)+
+                'HostId' => Fog::Mock.random_base64(65)
               }
             }
 
