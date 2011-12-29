@@ -54,9 +54,10 @@ module Fog
           target_directory.files.get(target_file_key)
         end
 
-        def destroy
+        def destroy(options = {})
           requires :directory, :key
-          connection.delete_object(directory.key, key)
+          attributes[:body] = nil if options['versionId'] == version
+          connection.delete_object(directory.key, key, options)
           true
         end
 
