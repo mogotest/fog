@@ -23,6 +23,7 @@ module Fog
         attribute :owner,               :aliases => 'Owner'
         attribute :storage_class,       :aliases => ['x-amz-storage-class', 'StorageClass']
         attribute :version,             :aliases => 'x-amz-version-id'
+        attribute :encryption,          :aliases => 'x-amz-server-side-encryption'
 
         def acl=(new_acl)
           valid_acls = ['private', 'public-read', 'public-read-write', 'authenticated-read']
@@ -52,7 +53,7 @@ module Fog
           requires :directory, :key
           connection.copy_object(directory.key, key, target_directory_key, target_file_key, options)
           target_directory = connection.directories.new(:key => target_directory_key)
-          target_directory.files.get(target_file_key)
+          target_directory.files.head(target_file_key)
         end
 
         def destroy(options = {})
@@ -118,6 +119,7 @@ module Fog
           options['Expires'] = expires if expires
           options.merge!(metadata)
           options['x-amz-storage-class'] = storage_class if storage_class
+          options['x-amz-server-side-encryption'] = encryption if encryption
 
           data = connection.put_object(directory.key, key, body, options)
           data.headers['ETag'].gsub!('"','')
